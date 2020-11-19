@@ -1,0 +1,6 @@
+importlib-resources
+more-itertools
+pytest
+setuptools
+wheel
+xopen
