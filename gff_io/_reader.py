@@ -40,9 +40,9 @@ ctg123 . exon            7000  9000  .  +  .  ID=exon00005;Parent=mrna0001
 from __future__ import annotations
 
 import dataclasses
-from pathlib import Path
-from typing import IO, Iterator, List, Type, Union, Dict, Optional
 from collections import OrderedDict
+from pathlib import Path
+from typing import IO, Dict, Iterator, List, Optional, Type, Union
 
 from more_itertools import peekable
 from xopen import xopen
