@@ -92,10 +92,51 @@ class Item:
     """
     GFF item.
 
+    Fields must be tab-separated. Also, all but the final field in each feature
+    line must contain a value; empty columns should be denoted with a `.`.
+
     Attributes
     ----------
     seqid
-        Bla.
+        The ID of the landmark used to establish the coordinate system for the
+        current feature. IDs may contain any characters, but must escape any
+        characters not in the set `[a-zA-Z0-9.:^*$@!+_?-|]`. In particular, IDs
+        may not contain unescaped whitespace and must not begin with an
+        unescaped `>`.
+    source
+        The source is a free text qualifier intended to describe the algorithm
+        or operating procedure that generated this feature.
+    type
+        The type of the feature (previously called the "method").
+    start
+        The start and end of the feature, in 1-based integer coordinates,
+        relative to the landmark given in column `seqid`. Start is always less
+        than or equal to end.
+    end
+        For zero-length features, such as insertion sites, start equals end and
+        the implied site is to the right of the indicated base in the direction
+        of the landmark.
+    score
+        The score of the feature, a floating point number. As in earlier versions
+        of the format, the semantics of the score are ill-defined. It is strongly
+        recommended that E-values be used for sequence similarity features, and
+        that P-values be used for ab initio gene prediction features. If there is
+        no score, put a `.` (a period) in this field
+    strand
+        The strand of the feature. `+` for positive strand (relative to the
+        landmark), `-` for minus strand, and `.` for features that are not
+        stranded. In addition, `?` can be used for features whose strandedness
+        is relevant, but unknown.
+    phase
+        The strand of the feature. `+` for positive strand (relative to the
+        landmark), `-` for minus strand, and `.` for features that are not
+        stranded. In addition, `?` can be used for features whose strandedness
+        is relevant, but unknown.
+    attributes
+        The strand of the feature. `+` for positive strand (relative to the
+        landmark), `-` for minus strand, and `.` for features that are not
+        stranded. In addition, `?` can be used for features whose strandedness
+        is relevant, but unknown.
     """
 
     seqid: str
