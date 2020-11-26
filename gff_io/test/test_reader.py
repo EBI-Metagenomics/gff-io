@@ -15,32 +15,36 @@ def test_read_example1(data_dir: Path):
         assert file.header == "##gff-version 3"
 
         item = file.read_item()
-        item.seqid == "AE014075.1:190-252|dna"
-        item.source == "iseq"
-        item.type == "."
-        item.start == "1"
-        item.end == "63"
-        item.score == "0.0"
-        item.strand == "+"
-        item.phase == "."
+        assert item.seqid == "AE014075.1:190-252|dna"
+        assert item.source == "iseq"
+        assert item.type == "."
+        assert item.start == "1"
+        assert item.end == "63"
+        assert item.interval.start == 0
+        assert item.interval.end == 63
+        assert item.score == "0.0"
+        assert item.strand == "+"
+        assert item.phase == "."
         msg = "ID=item1;Target_alph=dna;Profile_name=Leader_Thr;Profile_alph=dna;"
         msg += "Profile_acc=PF08254.12;Window=0;Bias=17.5;E-value=2.9e-14;"
         msg += "Epsilon=0.01;Score=38.8"
-        item.attributes == msg
+        assert item.attributes == msg
 
         item = file.read_item()
-        item.seqid == "AE014075.1:534-908|dna"
-        item.source == "iseq"
-        item.type == "."
-        item.start == "1"
-        item.end == "306"
-        item.score == "0.0"
-        item.strand == "+"
-        item.phase == "."
+        assert item.seqid == "AE014075.1:534-908|dna"
+        assert item.source == "iseq"
+        assert item.type == "."
+        assert item.start == "1"
+        assert item.end == "306"
+        assert item.interval.start == 0
+        assert item.interval.end == 306
+        assert item.score == "0.0"
+        assert item.strand == "+"
+        assert item.phase == "."
         msg = "ID=item2;Target_alph=dna;Profile_name=Y1_Tnp;Profile_alph=dna;"
         msg += "Profile_acc=PF01797.17;Window=0;Bias=0.0;E-value=1.7e-29;"
         msg += "Epsilon=0.01;Score=88.6"
-        item.attributes == msg
+        assert item.attributes == msg
 
         with pytest.raises(StopIteration):
             file.read_item()
@@ -57,6 +61,14 @@ def test_read_example2(data_dir: Path):
     assert item.type == "CDS"
     assert item.start == "5915"
     assert item.end == "6127"
+    assert item.interval.start == 5914
+    assert item.interval.end == 6127
+    assert item.interval.to_rinterval().start == 5915
+    assert item.interval.to_rinterval().end == 6127
+    interval = item.interval
+    interval = interval.offset(-5914)
+    assert interval.start == 0
+    assert interval.end == 213
     assert item.score == "."
     assert item.strand == "-"
     assert item.phase == "0"
@@ -71,6 +83,8 @@ def test_read_example2(data_dir: Path):
         assert item.type == "CDS"
         assert item.start == "5915"
         assert item.end == "6127"
+        assert item.interval.start == 5914
+        assert item.interval.end == 6127
         assert item.score == "."
         assert item.strand == "-"
         assert item.phase == "0"

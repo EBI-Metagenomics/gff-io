@@ -47,6 +47,8 @@ from typing import IO, Dict, Iterator, List, Optional, Type, Union
 from more_itertools import peekable
 from xopen import xopen
 
+from .interval import PyInterval, RInterval
+
 __all__ = [
     "ParsingError",
     "Item",
@@ -109,13 +111,13 @@ class Item:
     type
         The type of the feature (previously called the "method").
     start
-        The start and end of the feature, in 1-based integer coordinates,
-        relative to the landmark given in column `seqid`. Start is always less
-        than or equal to end.
+        Genomic start of the feature, with a 1-base offset. This is in contrast
+        with other 0-offset half-open sequence formats. Consider using
+        :method:`.interval` instead.
     end
-        For zero-length features, such as insertion sites, start equals end and
-        the implied site is to the right of the indicated base in the direction
-        of the landmark.
+        Genomic end of the feature, with a 1-base offset. This is the same end
+        coordinate as it is in 0-offset half-open sequence formats Consider using
+        :method:`.interval` instead.
     score
         The score of the feature, a floating point number. As in earlier versions
         of the format, the semantics of the score are ill-defined. It is strongly
@@ -148,6 +150,14 @@ class Item:
     strand: str
     phase: str
     attributes: str
+
+    @property
+    def interval(self) -> PyInterval:
+        """
+        Genomic interval of the feature.
+        """
+        rinterval = RInterval(int(self.start), int(self.end))
+        return rinterval.to_pyinterval()
 
     def attributes_asdict(self) -> Dict:
         attrs = []
